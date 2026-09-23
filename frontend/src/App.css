@@ -1,0 +1,2400 @@
+/* =========================================================
+   PROJECT DURGA — LAP 2 MAIN UI
+   Full-screen dark glassmorphism dashboard
+   Display-only interface
+   ========================================================= */
+
+:root {
+  --glass: rgba(8, 8, 10, 0.46);
+  --glass-strong: rgba(8, 8, 10, 0.58);
+
+  --border: rgba(255, 255, 255, 0.13);
+  --border-soft: rgba(255, 255, 255, 0.08);
+
+  --text: #f2f2f2;
+  --muted: #8d8d8d;
+  --dim: #606060;
+
+  --green: #74e6a5;
+  --red: #ef7777;
+  --amber: #e8b66d;
+
+  --shadow: 0 18px 55px rgba(0, 0, 0, 0.38);
+}
+
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  min-width: 320px;
+  background: #050505;
+}
+
+body {
+  width: 100%;
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+
+  background: #050505;
+
+  color: var(--text);
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+#root {
+  width: 100%;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button {
+  font: inherit;
+}
+
+
+/* =========================================================
+   FULL SCREEN BACKGROUND
+   ========================================================= */
+
+.app-shell {
+  position: relative;
+
+  width: 100vw;
+  min-width: 100%;
+  min-height: 100vh;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  background-image: url("/background.jpg");
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+  background-color: #050505;
+}
+
+
+/*
+   Background overlay intentionally kept light.
+
+   The UAV background should remain clearly visible
+   through the interface — approximately 35–40%.
+*/
+
+.background-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  z-index: 0;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.20) 0%,
+      rgba(0, 0, 0, 0.08) 50%,
+      rgba(0, 0, 0, 0.20) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.15) 0%,
+      rgba(0, 0, 0, 0.05) 50%,
+      rgba(0, 0, 0, 0.18) 100%
+    );
+}
+
+
+/* =========================================================
+   MAIN DASHBOARD CONTAINER
+   ========================================================= */
+
+.dashboard {
+  position: relative;
+
+  z-index: 1;
+
+  width: 100%;
+  max-width: none;
+
+  min-height: 100vh;
+
+  margin: 0;
+  padding: 20px 24px 16px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 16px;
+}
+
+
+/* =========================================================
+   GLASS PANELS
+   ========================================================= */
+
+.glass-panel {
+  background: var(--glass);
+
+  border: 1px solid var(--border);
+
+  box-shadow: var(--shadow);
+
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.header {
+  width: 100%;
+
+  min-height: 82px;
+
+  padding: 12px 20px;
+
+  border-radius: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   DURGA BRANDING
+   ========================================================= */
+
+.brand-section {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  min-width: 0;
+}
+
+
+/*
+   Actual DURGA logo from:
+   frontend/public/durga-logo.svg
+*/
+
+.durga-logo {
+  width: 58px;
+  height: 58px;
+
+  flex-shrink: 0;
+
+  object-fit: contain;
+
+  display: block;
+
+  filter:
+    drop-shadow(
+      0 0 12px rgba(255, 255, 255, 0.08)
+    );
+}
+
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  min-width: 0;
+}
+
+
+.brand-text h1 {
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 19px;
+  line-height: 1.1;
+
+  letter-spacing: 2.4px;
+
+  font-weight: 750;
+
+  white-space: nowrap;
+}
+
+
+.brand-text p {
+  margin: 5px 0 0;
+
+  color: var(--muted);
+
+  font-size: 9px;
+
+  letter-spacing: 1.7px;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   HEADER STATUS
+   ========================================================= */
+
+.header-status {
+  display: flex;
+  align-items: center;
+
+  gap: 18px;
+
+  flex-shrink: 0;
+}
+
+
+.system-status {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+}
+
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: var(--green);
+
+  box-shadow:
+    0 0 12px rgba(116, 230, 165, 0.8);
+}
+
+
+.status-label {
+  display: block;
+
+  color: var(--muted);
+
+  font-size: 8px;
+
+  letter-spacing: 1.5px;
+}
+
+
+.system-status strong,
+.simulation-status strong {
+  display: block;
+
+  margin-top: 3px;
+
+  color: var(--text);
+
+  font-size: 10px;
+
+  letter-spacing: 1px;
+}
+
+
+.header-divider {
+  width: 1px;
+  height: 31px;
+
+  background: var(--border);
+}
+
+
+.simulation-status {
+  min-width: 70px;
+}
+
+
+/* =========================================================
+   MAIN AREA
+   ========================================================= */
+
+.dashboard-main {
+  width: 100%;
+
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 16px;
+}
+
+
+/* =========================================================
+   TOP THREE-COLUMN GRID
+   ========================================================= */
+
+.top-grid {
+  width: 100%;
+
+  min-height: 540px;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(280px, 0.9fr)
+    minmax(450px, 1.6fr)
+    minmax(280px, 0.9fr);
+
+  gap: 16px;
+}
+
+
+/* =========================================================
+   COMMON PANEL HEADINGS
+   ========================================================= */
+
+.panel-heading {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 10px;
+
+  padding-bottom: 14px;
+
+  border-bottom:
+    1px solid var(--border-soft);
+}
+
+
+.panel-kicker {
+  color: #858585;
+
+  font-size: 8px;
+
+  letter-spacing: 1.7px;
+
+  font-weight: 700;
+}
+
+
+.panel-heading h2 {
+  margin: 5px 0 0;
+
+  color: var(--text);
+
+  font-size: 14px;
+
+  letter-spacing: 0.8px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   TELEMETRY PANEL
+   ========================================================= */
+
+.telemetry-panel {
+  min-width: 0;
+
+  border-radius: 17px;
+
+  padding: 18px;
+
+  overflow: hidden;
+}
+
+
+.live-indicator {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+
+  color: var(--green);
+
+  font-size: 8px;
+
+  letter-spacing: 1px;
+
+  font-weight: 700;
+}
+
+
+.live-indicator span {
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: var(--green);
+}
+
+
+.telemetry-list {
+  margin-top: 8px;
+}
+
+
+.telemetry-row {
+  min-height: 45px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  border-bottom:
+    1px solid rgba(255, 255, 255, 0.055);
+}
+
+
+.telemetry-name {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+}
+
+
+.telemetry-line {
+  width: 3px;
+  height: 22px;
+
+  flex-shrink: 0;
+
+  border-radius: 3px;
+
+  background: rgba(255, 255, 255, 0.26);
+}
+
+
+.telemetry-name strong {
+  display: block;
+
+  color: var(--text);
+
+  font-size: 9px;
+
+  letter-spacing: 0.7px;
+}
+
+
+.telemetry-name small {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #666;
+
+  font-size: 7px;
+
+  white-space: nowrap;
+}
+
+
+.telemetry-value {
+  flex-shrink: 0;
+
+  text-align: right;
+}
+
+
+.telemetry-value strong {
+  color: var(--text);
+
+  font-size: 14px;
+
+  font-weight: 700;
+}
+
+
+.telemetry-value span {
+  margin-left: 5px;
+
+  color: var(--muted);
+
+  font-size: 7px;
+}
+
+
+/* =========================================================
+   UNITY DIGITAL TWIN CONTAINER
+   ========================================================= */
+
+.unity-container {
+  min-width: 0;
+
+  border-radius: 17px;
+
+  padding: 18px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+
+.unity-header {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 10px;
+
+  padding-bottom: 14px;
+
+  border-bottom:
+    1px solid var(--border-soft);
+}
+
+
+.unity-header h2 {
+  margin: 5px 0 0;
+
+  color: var(--text);
+
+  font-size: 14px;
+
+  letter-spacing: 0.8px;
+}
+
+
+.unity-status {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  color: #888;
+
+  font-size: 8px;
+
+  letter-spacing: 1px;
+
+  white-space: nowrap;
+}
+
+
+.unity-dot {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: #666;
+}
+
+
+.unity-dot.active {
+  background: var(--green);
+
+  box-shadow:
+    0 0 10px rgba(116, 230, 165, 0.8);
+}
+
+
+/* =========================================================
+   UNITY VIEWPORT
+   ========================================================= */
+
+.unity-viewport {
+  flex: 1;
+
+  min-height: 390px;
+
+  margin-top: 14px;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: 12px;
+
+  background:
+    rgba(0, 0, 0, 0.12);
+
+  overflow: hidden;
+
+  display: grid;
+  place-items: center;
+}
+
+
+.unity-boundary {
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+  place-items: center;
+}
+
+
+.unity-boundary span {
+  color: rgba(255, 255, 255, 0.22);
+
+  font-size: 8px;
+
+  letter-spacing: 2px;
+
+  text-align: center;
+}
+
+
+.unity-footer {
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+  margin-top: 11px;
+
+  color: #686868;
+
+  font-size: 7px;
+
+  letter-spacing: 1.2px;
+}
+
+
+/* =========================================================
+   AI HEALTH PANEL
+   ========================================================= */
+
+.ai-panel {
+  min-width: 0;
+
+  border-radius: 17px;
+
+  padding: 18px;
+}
+
+
+.ai-badge {
+  padding: 5px 7px;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.15);
+
+  border-radius: 6px;
+
+  color: #aaa;
+
+  font-size: 8px;
+
+  font-weight: 800;
+
+  letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   HEALTH SCORE
+   ========================================================= */
+
+.health-score {
+  display: flex;
+
+  justify-content: center;
+
+  padding: 25px 0 15px;
+}
+
+
+.score-ring {
+  width: 142px;
+  height: 142px;
+
+  border-radius: 50%;
+
+  display: grid;
+  place-items: center;
+
+  background:
+    conic-gradient(
+      from -90deg,
+      var(--green) 0deg,
+      var(--green) var(--health-progress),
+      rgba(255, 255, 255, 0.08)
+        var(--health-progress),
+      rgba(255, 255, 255, 0.08) 360deg
+    );
+
+  position: relative;
+}
+
+
+.score-ring::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 8px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(7, 7, 8, 0.92);
+}
+
+
+.score-inner {
+  position: relative;
+
+  text-align: center;
+}
+
+
+.score-inner strong {
+  display: block;
+
+  color: var(--text);
+
+  font-size: 34px;
+
+  line-height: 1;
+}
+
+
+.score-inner span {
+  color: #777;
+
+  font-size: 8px;
+
+  letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   HEALTH STATE
+   ========================================================= */
+
+.health-state {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  gap: 7px;
+
+  font-size: 10px;
+
+  letter-spacing: 1.6px;
+}
+
+
+.state-dot {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: var(--green);
+
+  box-shadow:
+    0 0 10px rgba(116, 230, 165, 0.65);
+}
+
+
+.ai-divider {
+  margin: 20px 0 17px;
+
+  border-top:
+    1px solid var(--border-soft);
+}
+
+
+/* =========================================================
+   AI ADVISORY
+   ========================================================= */
+
+.advisory {
+  text-align: center;
+}
+
+
+.advisory h3 {
+  margin: 8px 0;
+
+  color: var(--text);
+
+  font-size: 11px;
+
+  letter-spacing: 0.7px;
+}
+
+
+.advisory p {
+  margin: 0;
+
+  color: #858585;
+
+  font-size: 9px;
+
+  line-height: 1.7;
+}
+
+
+/* =========================================================
+   AI METRICS
+   ========================================================= */
+
+.ai-metrics {
+  margin-top: 22px;
+
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  border-top:
+    1px solid var(--border-soft);
+
+  border-bottom:
+    1px solid var(--border-soft);
+}
+
+
+.ai-metrics div {
+  padding: 13px 6px;
+
+  text-align: center;
+
+  border-right:
+    1px solid var(--border-soft);
+}
+
+
+.ai-metrics div:last-child {
+  border-right: none;
+}
+
+
+.ai-metrics span {
+  display: block;
+
+  color: #666;
+
+  font-size: 7px;
+
+  letter-spacing: 1px;
+}
+
+
+.ai-metrics strong {
+  display: block;
+
+  margin-top: 5px;
+
+  color: var(--green);
+
+  font-size: 9px;
+
+  letter-spacing: 0.7px;
+}
+
+
+/* =========================================================
+   LIVE CHARTS
+   ========================================================= */
+
+.charts-section {
+  width: 100%;
+}
+
+
+.charts-grid {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 16px;
+}
+
+
+.chart-card {
+  min-width: 0;
+
+  padding: 18px;
+
+  border-radius: 17px;
+
+  background: var(--glass);
+
+  border:
+    1px solid var(--border);
+
+  box-shadow: var(--shadow);
+
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+
+.chart-heading {
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 10px;
+}
+
+
+.chart-heading h3 {
+  margin: 5px 0 0;
+
+  color: var(--text);
+
+  font-size: 11px;
+
+  letter-spacing: 0.8px;
+}
+
+
+.chart-current {
+  text-align: right;
+}
+
+
+.chart-current strong {
+  color: var(--text);
+
+  font-size: 17px;
+}
+
+
+.chart-current span {
+  margin-left: 4px;
+
+  color: #777;
+
+  font-size: 7px;
+}
+
+
+.chart-wrapper {
+  width: 100%;
+  height: 145px;
+
+  margin-top: 12px;
+
+  overflow: hidden;
+}
+
+
+.line-chart {
+  width: 100%;
+  height: 100%;
+
+  overflow: visible;
+}
+
+
+.line-chart line {
+  stroke:
+    rgba(255, 255, 255, 0.07);
+
+  stroke-width: 1;
+}
+
+
+.chart-line {
+  fill: none;
+
+  stroke:
+    rgba(255, 255, 255, 0.85);
+
+  stroke-width: 2;
+
+  vector-effect: non-scaling-stroke;
+}
+
+
+.chart-axis {
+  display: flex;
+
+  justify-content: space-between;
+
+  color: #555;
+
+  font-size: 7px;
+
+  letter-spacing: 0.5px;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.dashboard-footer {
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+  padding: 0 5px;
+
+  color:
+    rgba(255, 255, 255, 0.32);
+
+  font-size: 7px;
+
+  letter-spacing: 1.4px;
+}
+
+
+/* =========================================================
+   LARGE SCREENS
+   ========================================================= */
+
+@media (min-width: 1600px) {
+  .dashboard {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  .top-grid {
+    grid-template-columns:
+      minmax(300px, 0.9fr)
+      minmax(500px, 1.6fr)
+      minmax(300px, 0.9fr);
+  }
+}
+
+
+/* =========================================================
+   MEDIUM SCREENS
+   ========================================================= */
+
+@media (max-width: 1100px) {
+  .top-grid {
+    grid-template-columns:
+      minmax(260px, 0.9fr)
+      minmax(380px, 1.4fr);
+  }
+
+  .ai-panel {
+    grid-column: 1 / -1;
+  }
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 800px) {
+  .dashboard {
+    width: 100%;
+
+    padding:
+      14px;
+  }
+
+
+  .header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+
+  .header-status {
+    width: 100%;
+
+    flex-wrap: wrap;
+  }
+
+
+  .top-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .ai-panel {
+    grid-column: auto;
+  }
+
+
+  .unity-container {
+    min-height: 500px;
+  }
+
+
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 550px) {
+  .dashboard {
+    padding: 10px;
+  }
+
+
+  .header {
+    padding: 14px;
+  }
+
+
+  .durga-logo {
+    width: 48px;
+    height: 48px;
+  }
+
+
+  .brand-text h1 {
+    font-size: 15px;
+
+    letter-spacing: 1.8px;
+  }
+
+
+  .brand-text p {
+    font-size: 7px;
+
+    letter-spacing: 1.2px;
+  }
+
+
+  .header-divider {
+    display: none;
+  }
+
+
+  .simulation-status {
+    display: none;
+  }
+
+
+  .header-status {
+    gap: 10px;
+  }
+
+
+  .telemetry-panel,
+  .ai-panel,
+  .unity-container,
+  .chart-card {
+    padding: 14px;
+  }
+
+
+  .unity-viewport {
+    min-height: 360px;
+  }
+
+
+  .dashboard-footer {
+    display: none;
+  }
+}
+/* =========================================================
+   TELEMETRY SEVERITY COLORS
+   ========================================================= */
+
+.telemetry-row {
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+
+/* NORMAL */
+
+.telemetry-row.severity-normal
+  .telemetry-value strong {
+  color: #ffffff;
+}
+
+
+/* WARNING */
+
+.telemetry-row.severity-warning
+  .telemetry-value strong {
+  color: #ffd54a;
+  text-shadow:
+    0 0 10px rgba(255, 213, 74, 0.35);
+}
+
+
+.telemetry-row.severity-warning
+  .telemetry-line {
+  background: #ffd54a;
+  box-shadow:
+    0 0 8px rgba(255, 213, 74, 0.65);
+}
+
+
+/* CRITICAL */
+
+.telemetry-row.severity-critical
+  .telemetry-value strong {
+  color: #ff4d5a;
+  text-shadow:
+    0 0 12px rgba(255, 77, 90, 0.45);
+}
+
+
+.telemetry-row.severity-critical
+  .telemetry-line {
+  background: #ff4d5a;
+  box-shadow:
+    0 0 10px rgba(255, 77, 90, 0.75);
+}
+
+
+.telemetry-row.severity-critical {
+  background:
+    rgba(255, 60, 70, 0.045);
+
+  border-color:
+    rgba(255, 77, 90, 0.20);
+}
+/* =========================================================
+   AI ENGINE HEALTH PANEL
+   ========================================================= */
+
+.ai-health-panel {
+  min-height: 540px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   AI STATUS
+   ========================================================= */
+
+.ai-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  padding: 6px 10px;
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.12);
+
+  border-radius: 999px;
+
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.ai-status span {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 0 8px
+    rgba(255, 255, 255, 0.6);
+}
+
+.ai-status.ai-warning {
+  color: #ffd54a;
+  border-color:
+    rgba(255, 213, 74, 0.25);
+}
+
+.ai-status.ai-warning span {
+  background: #ffd54a;
+  box-shadow:
+    0 0 9px
+    rgba(255, 213, 74, 0.75);
+}
+
+.ai-status.ai-critical {
+  color: #ff4d5a;
+  border-color:
+    rgba(255, 77, 90, 0.3);
+}
+
+.ai-status.ai-critical span {
+  background: #ff4d5a;
+  box-shadow:
+    0 0 10px
+    rgba(255, 77, 90, 0.8);
+}
+
+.ai-status.ai-normal {
+  color: #ffffff;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.ai-empty-state {
+  flex: 1;
+
+  min-height: 380px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 30px;
+}
+
+.ai-empty-icon {
+  font-size: 42px;
+
+  margin-bottom: 18px;
+
+  opacity: 0.35;
+}
+
+.ai-empty-state strong {
+  font-size: 14px;
+  letter-spacing: 0.8px;
+}
+
+.ai-empty-state p {
+  max-width: 280px;
+
+  margin-top: 10px;
+
+  color: rgba(255, 255, 255, 0.45);
+
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   HEALTH SUMMARY
+   ========================================================= */
+
+.ai-health-summary {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 14px;
+
+  align-items: center;
+
+  margin-bottom: 16px;
+}
+
+
+/* =========================================================
+   HEALTH RING
+   ========================================================= */
+
+.health-score {
+  display: flex;
+  justify-content: center;
+}
+
+.health-score-ring {
+  --health: 70%;
+
+  width: 145px;
+  height: 145px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    conic-gradient(
+      #ffffff var(--health),
+      rgba(255, 255, 255, 0.08) var(--health)
+    );
+
+  position: relative;
+}
+
+.health-score-ring::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 8px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(7, 7, 9, 0.95);
+}
+
+.health-score-inner {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+}
+
+.health-score-inner strong {
+  font-size: 34px;
+  line-height: 1;
+
+  letter-spacing: -1px;
+}
+
+.health-score-inner strong small {
+  font-size: 15px;
+}
+
+.health-score-inner span {
+  margin-top: 7px;
+
+  font-size: 9px;
+
+  letter-spacing: 1.5px;
+
+  color:
+    rgba(255, 255, 255, 0.45);
+}
+
+
+/* =========================================================
+   HEALTH DETAILS
+   ========================================================= */
+
+.health-details {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.ai-detail-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+}
+
+.ai-detail-row span {
+  color:
+    rgba(255, 255, 255, 0.42);
+
+  font-size: 9px;
+
+  letter-spacing: 1px;
+}
+
+.ai-detail-row strong {
+  font-size: 11px;
+
+  letter-spacing: 0.5px;
+}
+
+
+/* =========================================================
+   AI STATE COLORS
+   ========================================================= */
+
+.ai-normal {
+  color: #ffffff;
+}
+
+.ai-warning {
+  color: #ffd54a;
+}
+
+.ai-critical {
+  color: #ff4d5a;
+}
+
+
+/* =========================================================
+   CONFIDENCE
+   ========================================================= */
+
+.confidence-section {
+  margin-bottom: 16px;
+}
+
+.confidence-header {
+  display: flex;
+  justify-content: space-between;
+
+  margin-bottom: 7px;
+}
+
+.confidence-header span {
+  font-size: 9px;
+
+  letter-spacing: 1px;
+
+  color:
+    rgba(255, 255, 255, 0.4);
+}
+
+.confidence-header strong {
+  font-size: 10px;
+}
+
+.confidence-track {
+  height: 4px;
+
+  border-radius: 999px;
+
+  overflow: hidden;
+
+  background:
+    rgba(255, 255, 255, 0.08);
+}
+
+.confidence-fill {
+  height: 100%;
+
+  border-radius: inherit;
+
+  background: #ffffff;
+
+  transition:
+    width 0.5s ease;
+}
+
+
+/* =========================================================
+   AI SECTIONS
+   ========================================================= */
+
+.ai-section {
+  margin-top: 14px;
+}
+
+.ai-section-title {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color:
+    rgba(255, 255, 255, 0.4);
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  letter-spacing: 1.4px;
+}
+
+.ai-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ai-tag {
+  padding: 6px 8px;
+
+  border-radius: 4px;
+
+  background:
+    rgba(255, 255, 255, 0.05);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+
+  color:
+    rgba(255, 255, 255, 0.72);
+
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   AI LIST
+   ========================================================= */
+
+.ai-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.ai-list-item {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 8px;
+
+  padding: 8px;
+
+  border-radius: 5px;
+
+  background:
+    rgba(255, 255, 255, 0.025);
+}
+
+.ai-list-marker {
+  flex-shrink: 0;
+
+  width: 17px;
+  height: 17px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255, 255, 255, 0.07);
+
+  font-size: 9px;
+}
+
+.ai-list-item strong {
+  display: block;
+
+  margin-bottom: 3px;
+
+  font-size: 9px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.5px;
+}
+
+.ai-list-item p {
+  margin: 0;
+
+  color:
+    rgba(255, 255, 255, 0.55);
+
+  font-size: 9px;
+
+  line-height: 1.45;
+}
+
+.anomaly-item {
+  border:
+    1px solid
+    rgba(255, 213, 74, 0.12);
+}
+
+.anomaly-item .ai-list-marker {
+  color: #ffd54a;
+}
+
+
+/* =========================================================
+   PHYSICS STATUS
+   ========================================================= */
+
+.physics-status {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: 16px;
+
+  padding: 10px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+
+  border-radius: 5px;
+
+  background:
+    rgba(255, 255, 255, 0.025);
+}
+
+.physics-status > div:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.physics-status strong {
+  font-size: 10px;
+
+  letter-spacing: 0.7px;
+}
+
+.physics-score {
+  font-size: 19px;
+
+  font-weight: 700;
+}
+
+.physics-score small {
+  font-size: 9px;
+
+  color:
+    rgba(255, 255, 255, 0.35);
+}
+
+
+/* =========================================================
+   MAINTENANCE RECOMMENDATION
+   ========================================================= */
+
+.recommendation-box {
+  margin-top: 16px;
+
+  padding: 12px;
+
+  border-radius: 6px;
+
+  border:
+    1px solid
+    rgba(255, 213, 74, 0.18);
+
+  background:
+    rgba(255, 213, 74, 0.035);
+}
+
+.recommendation-header {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  margin-bottom: 7px;
+}
+
+.recommendation-icon {
+  font-size: 13px;
+}
+
+.recommendation-header strong {
+  font-size: 9px;
+
+  letter-spacing: 0.8px;
+}
+
+.recommendation-box p {
+  margin: 0;
+
+  color:
+    rgba(255, 255, 255, 0.62);
+
+  font-size: 9px;
+
+  line-height: 1.55;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+  .ai-health-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .health-score-ring {
+    width: 125px;
+    height: 125px;
+  }
+
+}
+/* =========================================================
+   AI PANEL — ALIGNMENT FIX
+   ========================================================= */
+
+.ai-health-panel {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 540px;
+
+  padding: 18px;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+}
+
+
+/* ---------------------------------------------------------
+   HEADER
+   --------------------------------------------------------- */
+
+.ai-health-panel .panel-heading {
+  width: 100%;
+  min-width: 0;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  box-sizing: border-box;
+}
+
+.ai-health-panel .panel-heading > div:first-child {
+  min-width: 0;
+}
+
+.ai-health-panel .panel-heading h2 {
+  margin: 4px 0 0;
+
+  white-space: nowrap;
+}
+
+.ai-health-panel .ai-status {
+  flex-shrink: 0;
+
+  margin-top: 0;
+}
+
+
+/* ---------------------------------------------------------
+   HEALTH SUMMARY
+   --------------------------------------------------------- */
+
+.ai-health-panel .ai-health-summary {
+  width: 100%;
+  min-width: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(130px, 0.9fr)
+    minmax(145px, 1.1fr);
+
+  gap: 18px;
+
+  align-items: center;
+
+  box-sizing: border-box;
+}
+
+
+/* ---------------------------------------------------------
+   HEALTH RING
+   --------------------------------------------------------- */
+
+.ai-health-panel .health-score {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-health-panel .health-score-ring {
+  width: 140px;
+  height: 140px;
+
+  flex-shrink: 0;
+}
+
+
+/* ---------------------------------------------------------
+   HEALTH DETAILS
+   --------------------------------------------------------- */
+
+.ai-health-panel .health-details {
+  min-width: 0;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+.ai-health-panel .ai-detail-row {
+  width: 100%;
+  min-width: 0;
+
+  display: grid;
+
+  grid-template-columns: 1fr auto;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+.ai-health-panel .ai-detail-row span {
+  min-width: 0;
+
+  white-space: nowrap;
+}
+
+.ai-health-panel .ai-detail-row strong {
+  min-width: 0;
+
+  white-space: nowrap;
+  text-align: right;
+}
+
+
+/* ---------------------------------------------------------
+   CONFIDENCE
+   --------------------------------------------------------- */
+
+.ai-health-panel .confidence-section {
+  width: 100%;
+  min-width: 0;
+
+  box-sizing: border-box;
+
+  margin-top: 2px;
+}
+
+.ai-health-panel .confidence-header {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+}
+
+.ai-health-panel .confidence-track {
+  width: 100%;
+
+  box-sizing: border-box;
+}
+
+
+/* ---------------------------------------------------------
+   AI CONTENT SECTIONS
+   --------------------------------------------------------- */
+
+.ai-health-panel .ai-section {
+  width: 100%;
+  min-width: 0;
+
+  box-sizing: border-box;
+}
+
+.ai-health-panel .ai-tags {
+  width: 100%;
+  min-width: 0;
+
+  box-sizing: border-box;
+}
+
+.ai-health-panel .ai-list {
+  width: 100%;
+  min-width: 0;
+
+  box-sizing: border-box;
+}
+
+.ai-health-panel .ai-list-item {
+  width: 100%;
+  min-width: 0;
+
+  box-sizing: border-box;
+}
+
+
+/* ---------------------------------------------------------
+   TEXT WRAPPING
+   --------------------------------------------------------- */
+
+.ai-health-panel .ai-list-item > div {
+  min-width: 0;
+}
+
+.ai-health-panel .ai-list-item p {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.ai-health-panel .ai-tag {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+
+/* ---------------------------------------------------------
+   PHYSICS STATUS
+   --------------------------------------------------------- */
+
+.ai-health-panel .physics-status {
+  width: 100%;
+  min-width: 0;
+
+  box-sizing: border-box;
+}
+
+
+/* ---------------------------------------------------------
+   RECOMMENDATION
+   --------------------------------------------------------- */
+
+.ai-health-panel .recommendation-box {
+  width: 100%;
+  min-width: 0;
+
+  box-sizing: border-box;
+}
+
+.ai-health-panel .recommendation-box p {
+  overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   SMALL LAPTOP / NARROW PANEL
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+  .ai-health-panel {
+    padding: 16px;
+  }
+
+  .ai-health-panel .ai-health-summary {
+    grid-template-columns:
+      minmax(115px, 0.85fr)
+      minmax(135px, 1.15fr);
+
+    gap: 12px;
+  }
+
+  .ai-health-panel .health-score-ring {
+    width: 125px;
+    height: 125px;
+  }
+
+}
+
+
+/* =========================================================
+   VERY NARROW
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .ai-health-panel .ai-health-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-health-panel .health-score {
+    justify-content: center;
+  }
+
+}
+/* =========================================================
+   LIVE TELEMETRY CHARTS
+   ========================================================= */
+
+.charts-section {
+  width: 100%;
+  min-width: 0;
+}
+
+
+.charts-grid {
+  width: 100%;
+  min-width: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+
+  gap: 16px;
+}
+
+
+/* =========================================================
+   CHART CARD
+   ========================================================= */
+
+.chart-card {
+  position: relative;
+
+  min-width: 0;
+
+  box-sizing: border-box;
+
+  padding: 16px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+
+  border-radius: 8px;
+
+  background:
+    rgba(8, 8, 10, 0.52);
+
+  backdrop-filter: blur(8px);
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   CHART HEADER
+   ========================================================= */
+
+.chart-heading {
+  width: 100%;
+
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: space-between;
+
+  gap: 16px;
+}
+
+
+.chart-heading > div:first-child {
+  min-width: 0;
+}
+
+
+.chart-heading h3 {
+  margin: 4px 0 0;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.8px;
+
+  white-space: nowrap;
+}
+
+
+.chart-current {
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: baseline;
+
+  gap: 5px;
+}
+
+
+.chart-current strong {
+  font-size: 20px;
+
+  font-weight: 700;
+}
+
+
+.chart-current span {
+  font-size: 9px;
+
+  color:
+    rgba(255, 255, 255, 0.42);
+
+  letter-spacing: 0.7px;
+}
+
+
+/* =========================================================
+   CHART STATUS
+   ========================================================= */
+
+.chart-status {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  margin-top: 7px;
+
+  color:
+    rgba(255, 255, 255, 0.38);
+
+  font-size: 8px;
+
+  letter-spacing: 1px;
+}
+
+
+.chart-status-dot {
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 0 7px
+    rgba(255, 255, 255, 0.65);
+}
+
+
+/* =========================================================
+   GRAPH
+   ========================================================= */
+
+.chart-wrapper {
+  width: 100%;
+
+  height: 180px;
+
+  margin-top: 10px;
+
+  overflow: hidden;
+}
+
+
+.line-chart {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  overflow: visible;
+}
+
+
+/* =========================================================
+   GRID
+   ========================================================= */
+
+.chart-grid-line {
+  stroke:
+    rgba(255, 255, 255, 0.07);
+
+  stroke-width: 1;
+}
+
+
+/* =========================================================
+   GRAPH LINE
+   ========================================================= */
+
+.chart-line {
+  fill: none;
+
+  stroke: #ffffff;
+
+  stroke-width: 2.5;
+
+  stroke-linecap: round;
+
+  stroke-linejoin: round;
+
+  vector-effect: non-scaling-stroke;
+
+  filter:
+    drop-shadow(
+      0 0 5px
+      rgba(255, 255, 255, 0.25)
+    );
+}
+
+
+/* =========================================================
+   GRAPH AREA
+   ========================================================= */
+
+.chart-area {
+  fill:
+    rgba(255, 255, 255, 0.035);
+
+  stroke: none;
+}
+
+
+/* =========================================================
+   TIME AXIS
+   ========================================================= */
+
+.chart-axis {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-top: 5px;
+
+  color:
+    rgba(255, 255, 255, 0.28);
+
+  font-size: 8px;
+
+  letter-spacing: 0.7px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+}

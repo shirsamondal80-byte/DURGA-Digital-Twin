@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Laptop B</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #121212; color: #fff; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .card { background: #1e1e1e; border-radius: 8px; padding: 20px; width: 600px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        h2 { margin-top: 0; color: #00ffcc; font-size: 18px; }
+        #sim-container { width: 100%; height: 350px; background: #000; border-radius: 4px; position: relative; overflow: hidden; }
+        .status { margin-top: 12px; font-size: 14px; color: #aaa; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>UNITY SIMULATION</h2>
+        <div id="sim-container"></div>
+        <div class="status" id="connection-status">Connecting to server...</div>
+    </div>
+
+    <!-- Three.js Library CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Setup Three.js 3D Viewport inside the card frame
+        const container = document.getElementById('sim-container');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        container.appendChild(renderer.domElement);
+
+        // Create a 3D Mesh representing the simulation telemetry
+        const geometry = new THREE.BoxGeometry(1.5, 1.5, 1.5);
+        const material = new THREE.MeshBasicMaterial({ color: 0x00ffcc, wireframe: true });
+        const cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
+
+        camera.position.z = 5;
+
+        // Standard render loop
+        function animate() {
+            requestAnimationFrame(animate);
+            cube.rotation.x += 0.005;
+            cube.rotation.y += 0.008;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // WebSocket Link to Laptop C (Server IP: 192.168.1.6)
+        const ws = new WebSocket('ws://192.168.1.6:8000/ws/telemetry');
+        const statusEl = document.getElementById('connection-status');
+
+        ws.onopen = () => {
+            statusEl.innerText = 'Status: Connected to Server (192.168.1.6:8000)';
+            statusEl.style.color = '#00ffcc';
+        };
+
+        ws.onmessage = (event) => {
+            try {
+                const data = JSON.parse(event.data);
+                // Dynamically update rotation or state based on LAN server payload
+                if (data.scale) {
+                    cube.scale.set(data.scale, data.scale, data.scale);
+                }
+            } catch (err) {
+                console.error("Failed to parse incoming telemetry:", err);
+            }
+        };
+
+        ws.onerror = () => {
+            statusEl.innerText = 'Status: Connection Error (Check Laptop C IP)';
+            statusEl.style.color = '#ff4444';
+        };
+
+        ws.onclose = () => {
+            statusEl.innerText = 'Status: Disconnected from Server';
+            statusEl.style.color = '#ffaa00';
+        };
+
+        // Handle window resizing cleanly
+        window.addEventListener('resize', () => {
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        });
+    </script>
+</body>
+</html>
